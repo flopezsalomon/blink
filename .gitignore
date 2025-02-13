@@ -1,0 +1,46 @@
+# Archivos generados por STM32CubeMX
+*.log
+
+# Carpeta de compilación
+/build/
+/Debug/
+/Release/
+
+# Archivos objeto y binarios
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.d
+*.a
+*.so
+
+# Archivos de depuración
+*.dep
+*.su
+*.swp
+*.swo
+*.axf
+*.bak
+*.tmp
+*.patch
+
+# Archivos temporales de edición
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*.bak
+*.tmp
+*.patch
+
+# Archivos de control de versiones de herramientas
+.idea/
+*.DS_Store
+*.pyc
+__pycache__/
+
+# Excluir archivos generados de CubeMX
+MXProjectFiles/
