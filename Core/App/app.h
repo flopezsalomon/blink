@@ -5,14 +5,15 @@
  * @copyright
  */
 
+#ifndef _APP_H_
+#define _APP_H_
+
 #include <stdio.h>
 
 #include "FreeRTOS.h"
+#include "log.h"
 #include "stm32f1xx_hal.h"
 #include "task.h"
-
-#ifndef _APP_H_
-#define _APP_H_
 
 void blink(void *arg);
 void sensors(void *arg);
