@@ -4,7 +4,9 @@
 
 static const char *TAG = "app";
 
-void blink(void *arg) {
+uint8_t value;
+
+void blink(void *parameters __attribute__((unused))) {
   while (1) {
     HAL_GPIO_TogglePin(
         GPIOC, GPIO_PIN_13);  // Alternar el estado del LED conectado a PC13
@@ -13,7 +15,7 @@ void blink(void *arg) {
   }
 }
 
-void sensors(void *arg) {
+void sensors(void *parameters __attribute__((unused))) {
   while (1) {
     LOG_INFO(TAG, "From sensors task");
     vTaskDelay(1000 / portTICK_PERIOD_MS);
