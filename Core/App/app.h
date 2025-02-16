@@ -11,11 +11,13 @@
 #include <stdio.h>
 
 #include "FreeRTOS.h"
+#include "comms.h"
 #include "log.h"
 #include "stm32f1xx_hal.h"
 #include "task.h"
 
 void blink(void *arg);
 void sensors(void *arg);
+void shell(void *arg);
 
 #endif /* _APP_H_ */

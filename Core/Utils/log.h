@@ -2,12 +2,9 @@
  * @file log.h
  * @brief Módulo de logs del sistema.
  *
- * "Inspirado" en esp-log.
- * TODO: Implementar niveles de log por cada "tag"
- *
  * Utilizar los macros LOG_<nivel>(tag, format, ...).
  *
- * @copyright Krea Mining SpA, 2024
+ * @copyright
  */
 
 #ifndef _LOG_H_
