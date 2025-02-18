@@ -17,7 +17,9 @@
 #include "stream_buffer.h"
 #include "task.h"
 
-int comms_recv_line(char *buf, int buf_len);
+int comms_recv_line(char *buf, int buf_len, char end_character);
 int comms_init(UART_HandleTypeDef *huart);
+int comms_send_line(const char *command);
+int comms_flush(void);
 
 #endif  //_COMMS_H

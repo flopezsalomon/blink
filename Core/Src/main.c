@@ -51,7 +51,6 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 static const char *TAG = "app";
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

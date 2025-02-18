@@ -1,8 +1,7 @@
-
 #include "comms.h"
 
 #define RX_BUF_LEN 128
-#define RX_TIMEOUT_MS 1000
+#define RX_TIMEOUT_MS 100
 
 static UART_HandleTypeDef *uart;
 static StreamBufferHandle_t rx_buffer;
@@ -19,25 +18,31 @@ int comms_init(UART_HandleTypeDef *huart) {
   return 1;
 }
 
-int comms_recv_line(char *buf, int buf_len) {
+int comms_send_line(const char *command) {
+  return HAL_UART_Transmit(uart, (uint8_t *)command, (uint16_t)strlen(command),
+                           HAL_MAX_DELAY);
+}
+
+int comms_recv_line(char *buf, int buf_len, char end_character) {
   int idx = 0;  // indica el numero de caracteres recibido
   HAL_UART_Receive_IT(uart, &rx_char, 1);
 
   while (idx < buf_len) {
-    int recv_len = xStreamBufferReceive(rx_buffer, &buf[idx], 1,
-                                        pdMS_TO_TICKS(RX_TIMEOUT_MS));
+    int recv_len = (int)xStreamBufferReceive(rx_buffer, &buf[idx], 1,
+                                             pdMS_TO_TICKS(RX_TIMEOUT_MS));
 
     // Hubo timeout?
     if (recv_len == 0) return 0;
 
-    // frame termina las líneas con '\r\n'
-    // if ((buf[idx] == '\n' && idx > 0 && buf[idx - 1] == '\r')) break;
-    if (idx > 0 && buf[idx] == '\n') break;
+    // frame termina las líneas con '\n'
+    if (idx > 0 && buf[idx] == end_character) break;
     idx++;
   }
 
   return idx;
 }
+
+int comms_flush(void) { return 1; }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
   if (huart->Instance == USART1) {  // Reemplazar según el UART usado

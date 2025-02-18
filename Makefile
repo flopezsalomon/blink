@@ -14,7 +14,8 @@
 # target
 ######################################
 TARGET = blink
-
+FLASH_TOOL = st-flash
+FLASH_ADDRESS = 0x08000000
 
 ######################################
 # building variables
@@ -206,10 +207,16 @@ clean:
 	-rm -fR $(BUILD_DIR)
 
 #######################################
+# flash
+#######################################
+flash:
+	$(FLASH_TOOL) --reset write $(BUILD_DIR)/$(TARGET).bin $(FLASH_ADDRESS)
+
+#######################################
 # openocd -d3 
 #######################################
-flash: all
-	openocd -f interface/stlink.cfg -f target/stm32f1x.cfg -c "reset_config srst_only srst_nogate; init; program $(BUILD_DIR)/$(TARGET).elf verify reset exit"  
+#flash: all
+#	openocd -f interface/stlink.cfg -f target/stm32f1x.cfg -c "reset_config srst_only srst_nogate; init; program $(BUILD_DIR)/$(TARGET).elf verify reset exit"  
 #######################################
 # dependencies 
 #######################################

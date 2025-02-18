@@ -13,8 +13,13 @@
 #include "FreeRTOS.h"
 #include "comms.h"
 #include "log.h"
+#include "queue.h"
+#include "semphr.h"
 #include "stm32f1xx_hal.h"
 #include "task.h"
+
+#define QUEUE_LENGTH 5
+#define QUEUE_ITEM_SIZE sizeof(int)
 
 void blink(void *arg);
 void sensors(void *arg);
