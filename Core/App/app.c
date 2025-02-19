@@ -17,24 +17,33 @@ void blink(void *parameters __attribute__((unused))) {
   while (1) {
     HAL_GPIO_TogglePin(
         GPIOC, GPIO_PIN_13);  // Alternar el estado del LED conectado a PC13
-    vTaskDelay(200 / portTICK_PERIOD_MS);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
 
 void sensors(void *parameters __attribute__((unused))) {
-  int adcValue = 0;
+  uint32_t adcValue1 = 0;
+  uint32_t adcValue2 = 0;
+
   while (1) {
-    adcValue = (rand() % 1024);  // Simula lectura ADC (0 - 1023)
-    if (xQueueSend(dataQueue, &adcValue, portMAX_DELAY) == pdPASS) {
-      LOG_INFO(TAG, "Productor: Enviado %d a la cola\n", adcValue);
-      xSemaphoreGive(dataSemaphore);  // Señalar al consumidor que hay datos
+    if (analog_read(1, &adcValue1) == ADC_READ_SUCCESS) {
+      LOG_INFO(TAG, "A0: Enviado %d a la cola\n", adcValue1);
+    } else {
+      LOG_ERROR(TAG, "Error en lectura adc 0!");
     }
+
+    if (analog_read(2, &adcValue2) == ADC_READ_SUCCESS) {
+      LOG_INFO(TAG, "A1: Enviado %d a la cola\n", adcValue2);
+    } else {
+      LOG_ERROR(TAG, "Error en lectura adc 1!");
+    }
+
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
 
 void shell(void *parameters __attribute__((unused))) {
-  int receivedValue;
+  uint32_t receivedValue;
   while (1) {
     if (comms_recv_line(buffer, 128, '\n') > 0) {
       LOG_INFO(TAG, "Msg from user: %s", buffer);
