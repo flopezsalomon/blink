@@ -58,3 +58,12 @@ void shell(void *parameters __attribute__((unused))) {
     vTaskDelay(100 / portTICK_PERIOD_MS);
   }
 }
+
+void button(void *parameters __attribute__((unused))) {
+  while (1) {
+    if (button_check_state()) {
+      LOG_DEBUG(TAG, "Boton fue presionado");
+    }
+    vTaskDelay(200 / portTICK_PERIOD_MS);
+  }
+}

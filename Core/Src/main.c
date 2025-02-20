@@ -26,6 +26,7 @@
 #include "FreeRTOS.h"
 #include "analog.h"
 #include "app.h"
+#include "button.h"
 #include "comms.h"
 #include "log.h"
 #include "task.h"
@@ -106,9 +107,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   comms_init(&huart1);
+  button_init();
   xTaskCreate(blink, "blink", 128, NULL, tskIDLE_PRIORITY, NULL);
   xTaskCreate(sensors, "sensors", 128, NULL, tskIDLE_PRIORITY, NULL);
   xTaskCreate(shell, "shell", 128, NULL, tskIDLE_PRIORITY, NULL);
+  xTaskCreate(button, "button", 128, NULL, tskIDLE_PRIORITY, NULL);
   vTaskStartScheduler();
 
   /* USER CODE END 2 */
@@ -311,6 +314,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
@@ -321,6 +325,16 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
