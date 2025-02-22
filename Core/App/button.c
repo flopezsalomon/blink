@@ -8,14 +8,14 @@ int16_t button_init(void) {
 }
 
 int16_t button_check_state(void) {
+  int16_t ret_value = 0;
   if (xSemaphoreTake(xButtonSemaphore, portMAX_DELAY) == pdTRUE) {
-    if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == GPIO_PIN_RESET) {
-      return 1;
+    if ((HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == GPIO_PIN_RESET)) {
+      ret_value = 1;
+      HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
     }
-
-  } else {
-    return 0;
   }
+  return ret_value;
 }
 
 /**
@@ -28,6 +28,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 
   if (GPIO_Pin == GPIO_PIN_5 &&
       HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) == GPIO_PIN_RESET) {
+    HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
     // Dar el semáforo avisando a la tarea de que se pulsó el botón
     xSemaphoreGiveFromISR(xButtonSemaphore, &xHigherPriorityTaskWoken);
 

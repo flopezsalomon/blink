@@ -29,11 +29,17 @@ ADC_HandleTypeDef *adc_handler;
  */
 
 int16_t analog_read(uint8_t adc, uint32_t *adc_value) {
-    if (adc == 1) {
-    adc_handler = &hadc1;
-  }
-  if (adc == 2) {
-    adc_handler = &hadc2;
+  switch (adc) {
+    case 1:
+      adc_handler = &hadc1;
+      break;
+
+    case 2:
+      adc_handler = &hadc2;
+      break;
+
+    default:
+      break;
   }
 
   HAL_ADCEx_Calibration_Start(adc_handler);

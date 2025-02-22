@@ -24,8 +24,11 @@ void blink(void *parameters __attribute__((unused))) {
 void sensors(void *parameters __attribute__((unused))) {
   uint32_t adcValue1 = 0;
   uint32_t adcValue2 = 0;
-
+  uint8_t var = 0;
   while (1) {
+    do {
+      // vTaskDelay(10 / portTICK_PERIOD_MS);
+    } while (!var);
     if (analog_read(1, &adcValue1) == ADC_READ_SUCCESS) {
       LOG_INFO(TAG, "A0: Enviado %d a la cola\n", adcValue1);
     } else {
@@ -61,7 +64,7 @@ void shell(void *parameters __attribute__((unused))) {
 
 void button(void *parameters __attribute__((unused))) {
   while (1) {
-    if (button_check_state()) {
+    if (button_check_state() > 0) {
       LOG_DEBUG(TAG, "Boton fue presionado");
     }
     vTaskDelay(200 / portTICK_PERIOD_MS);
