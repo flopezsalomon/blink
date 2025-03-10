@@ -7,6 +7,9 @@ char buffer[128];
 QueueHandle_t dataQueue;
 SemaphoreHandle_t dataSemaphore;
 
+/**Blink task, just blink a led according to vTaskDelay . In this case , blinks
+ * every 1 sec. */
+
 void blink(void *parameters __attribute__((unused))) {
   dataQueue = xQueueCreate(QUEUE_LENGTH, QUEUE_ITEM_SIZE);
   dataSemaphore = xSemaphoreCreateBinary();
